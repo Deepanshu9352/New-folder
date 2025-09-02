@@ -2,275 +2,294 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Happy Birthday 3D Cube</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday 3D Cube</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Montserrat', sans-serif;
-        }
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+    }
 
-        /* Fixed gradient background */
-        .party-bg {
-            background: linear-gradient(to bottom right, #ffe6f0, #ffb6c1);
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-        }
+    /* Fixed gradient background */
+    .party-bg {
+      background: linear-gradient(to bottom right, #ffe6f0, #ffb6c1);
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
 
-        /* Confetti layer */
-        #confettiCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 5;
-        }
+    /* Confetti layer */
+    #confettiCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
 
-        /* Hide toggle button on desktop */
-        #toggleBtn {
-            display: none;
-        }
+    /* Hide toggle button on desktop */
+    #toggleBtn {
+      display: none;
+    }
 
-        @media (max-width: 900px) {
-            #toggleBtn {
-                display: block;
-            }
-        }
-    </style>
+    @media (max-width: 900px) {
+      #toggleBtn {
+        display: block;
+      }
+    }
+  </style>
 </head>
 
 <body class="text-gray-800 min-h-screen">
-    <!-- Background -->
-    <div class="party-bg"></div>
-    <canvas id="confettiCanvas"></canvas>
+  <!-- Background -->
+  <div class="party-bg"></div>
+  <canvas id="confettiCanvas"></canvas>
 
-    <main class="relative min-h-screen w-full overflow-hidden">
-        <section class="relative z-10 w-full min-h-screen grid place-items-center">
-            <div class="flex flex-col items-center gap-6">
-                <!-- Heading -->
-                <h1 class="text-3xl md:text-5xl font-bold px-6 py-2 rounded-lg bg-white shadow text-center text-gray-700 cursor-pointer hover:bg-black hover:text-white">
-                    Happy Birthday
-                </h1>
+  <main class="relative min-h-screen w-full overflow-hidden">
+    <section class="relative z-10 w-full min-h-screen grid place-items-center">
+      <div class="flex flex-col items-center gap-6">
+        <!-- Heading -->
+        <h1
+          class="text-3xl md:text-5xl font-bold px-6 py-2 rounded-lg bg-white shadow text-center text-gray-700 cursor-pointer hover:bg-black hover:text-white">
+          Happy Birthday
+        </h1>
 
-                <!-- Date -->
-                <p id="bdayDate"
-                   class="text-lg md:text-xl font-semibold px-6 py-2 rounded-lg bg-white shadow text-gray-700 cursor-pointer hover:bg-black hover:text-white">
-                    05 September 2025
-                </p>
+        <!-- Date -->
+        <p id="bdayDate"
+          class="text-lg md:text-xl font-semibold px-6 py-2 rounded-lg bg-white shadow text-gray-700 cursor-pointer hover:bg-black hover:text-white">
+          05 September 2025
+        </p>
 
-                <!-- Cube -->
-                <div id="stage"
-                    class="w-[90vw] h-[60vh] md:h-[68vh] lg:h-[66vh] max-w-4xl mx-auto">
-                </div>
+        <!-- Cube -->
+        <div id="stage" class="w-[90vw] h-[60vh] md:h-[68vh] lg:h-[66vh] max-w-4xl mx-auto"></div>
 
-                <!-- Mobile button -->
-                <button id="toggleBtn"
-                    class="px-6 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-md shadow transition">
-                    Open
-                </button>
-            </div>
-        </section>
-    </main>
+        <!-- Mobile button -->
+        <button id="toggleBtn"
+          class="px-6 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-md shadow transition">
+          Open
+        </button>
+      </div>
+    </section>
+  </main>
 
-    <!-- Three.js + Cube JS -->
-    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-    <script>
-        const confettiCanvas = document.getElementById('confettiCanvas');
-        const ctx = confettiCanvas.getContext('2d');
-        confettiCanvas.width = window.innerWidth;
-        confettiCanvas.height = window.innerHeight;
-        const confetti = Array.from({ length: 150 }).map(() => ({
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            r: Math.random() * 6 + 2,
-            d: Math.random() * 0.5 + 0.5,
-            color: `hsl(${Math.random() * 360}, 100%, 50%)`
-        }));
+  <!-- Three.js + Cube JS -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script>
+    const confettiCanvas = document.getElementById('confettiCanvas');
+    const ctx = confettiCanvas.getContext('2d');
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
 
-        function drawConfetti() {
-            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            confetti.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = p.color;
-                ctx.fill();
-            });
-            updateConfetti();
+    // Reduced confetti for performance
+    const confetti = Array.from({ length: 80 }).map(() => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 6 + 2,
+      d: Math.random() * 0.5 + 0.5,
+      color: `hsl(${Math.random() * 360}, 100%, 50%)`
+    }));
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confetti.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      updateConfetti();
+    }
+
+    function updateConfetti() {
+      confetti.forEach(p => {
+        p.y += p.d;
+        if (p.y > confettiCanvas.height) {
+          p.y = -10;
+          p.x = Math.random() * confettiCanvas.width;
         }
+      });
+    }
 
-        function updateConfetti() {
-            confetti.forEach(p => {
-                p.y += p.d;
-                if (p.y > confettiCanvas.height) {
-                    p.y = -10;
-                    p.x = Math.random() * confettiCanvas.width;
-                }
-            });
-        }
+    function animateConfetti() {
+      drawConfetti();
+      requestAnimationFrame(animateConfetti);
+    }
+    animateConfetti();
 
-        function animateConfetti() {
-            drawConfetti();
-            requestAnimationFrame(animateConfetti);
-        }
-        animateConfetti();
+    window.addEventListener('resize', () => {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    });
 
-        window.addEventListener('resize', () => {
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
+    // Use compressed webp images
+    const imageUrls = [
+      './images/1.webp',
+      './images/2.webp',
+      './images/3.webp',
+      './images/4.webp',
+      './images/5.webp',
+      './images/6.webp'
+    ];
+
+    const container = document.getElementById('stage');
+    const toggleBtn = document.getElementById('toggleBtn');
+    let scene, camera, renderer, group, innerGroup, clock, raycaster, mouse;
+    let faces = [];
+    let isOpen = false;
+
+    init();
+    animate();
+
+    function init() {
+      scene = new THREE.Scene();
+      const { clientWidth: W, clientHeight: H } = container;
+
+      camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 100);
+      camera.position.set(0, 0, 4.5);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setSize(W, H);
+      container.appendChild(renderer.domElement);
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+      const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+      dir.position.set(1, 1, 1);
+      scene.add(dir);
+
+      group = new THREE.Group();
+      scene.add(group);
+
+      const size = 1.4, half = size / 2, loader = new THREE.TextureLoader();
+      const faceConfigs = [
+        { pos: [half, 0, 0], rot: [0, Math.PI / 2, 0], img: imageUrls[0], dir: [1, 0, 0] },
+        { pos: [-half, 0, 0], rot: [0, -Math.PI / 2, 0], img: imageUrls[1], dir: [-1, 0, 0] },
+        { pos: [0, half, 0], rot: [-Math.PI / 2, 0, 0], img: imageUrls[2], dir: [0, 1, 0] },
+        { pos: [0, -half, 0], rot: [Math.PI / 2, 0, 0], img: imageUrls[3], dir: [0, -1, 0] },
+        { pos: [0, 0, half], rot: [0, 0, 0], img: imageUrls[4], dir: [0, 0, 1] },
+        { pos: [0, 0, -half], rot: [0, Math.PI, 0], img: imageUrls[5], dir: [0, 0, -1] },
+      ];
+
+      // Lazy load textures
+      faceConfigs.forEach(cfg => {
+        const geo = new THREE.PlaneGeometry(size, size);
+        loader.load(cfg.img, (tex) => {
+          tex.colorSpace = THREE.SRGBColorSpace;
+          const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(...cfg.pos);
+          mesh.rotation.set(...cfg.rot);
+          mesh.userData = { dir: cfg.dir, base: [...cfg.pos] };
+          group.add(mesh);
+          faces.push(mesh);
         });
+      });
 
-        const imageUrls = ['images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg', 'images/6.jpg'];
-        const container = document.getElementById('stage');
-        const toggleBtn = document.getElementById('toggleBtn');
-        let scene, camera, renderer, group, innerGroup, clock, raycaster, mouse;
-        let faces = [];
-        let isOpen = false;
+      innerGroup = new THREE.Group();
+      scene.add(innerGroup);
 
-        init(); animate();
+      const innerSize = 1.1, innerHalf = innerSize / 2;
+      [
+        { pos: [innerHalf, 0, 0], rot: [0, Math.PI / 2, 0], img: imageUrls[0] },
+        { pos: [-innerHalf, 0, 0], rot: [0, -Math.PI / 2, 0], img: imageUrls[1] },
+        { pos: [0, innerHalf, 0], rot: [-Math.PI / 2, 0, 0], img: imageUrls[2] },
+        { pos: [0, -innerHalf, 0], rot: [Math.PI / 2, 0, 0], img: imageUrls[3] },
+        { pos: [0, 0, innerHalf], rot: [0, 0, 0], img: imageUrls[4] },
+        { pos: [0, 0, -innerHalf], rot: [0, Math.PI, 0], img: imageUrls[5] },
+      ].forEach(cfg => {
+        const geo = new THREE.PlaneGeometry(innerSize, innerSize);
+        loader.load(cfg.img, (tex) => {
+          tex.colorSpace = THREE.SRGBColorSpace;
+          const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(...cfg.pos);
+          mesh.rotation.set(...cfg.rot);
+          innerGroup.add(mesh);
+        });
+      });
 
-        function init() {
-            scene = new THREE.Scene();
-            const { clientWidth: W, clientHeight: H } = container;
-            camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 100);
-            camera.position.set(0, 0, 4.5);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setSize(W, H);
-            container.appendChild(renderer.domElement);
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
 
-            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-            const dir = new THREE.DirectionalLight(0xffffff, 0.6);
-            dir.position.set(1, 1, 1);
-            scene.add(dir);
+      if (window.innerWidth > 768) {
+        container.addEventListener('mousemove', onMouseMove);
+        container.addEventListener('mouseleave', () => toggleOpen(false));
+      }
+      toggleBtn.addEventListener('click', () => {
+        toggleOpen(!isOpen);
+        toggleBtn.textContent = isOpen ? "Close" : "Open";
+      });
 
-            group = new THREE.Group();
-            scene.add(group);
-            const size = 1.4, half = size / 2, loader = new THREE.TextureLoader();
-            const faceConfigs = [
-                { pos: [half, 0, 0], rot: [0, Math.PI / 2, 0], img: imageUrls[0], dir: [1, 0, 0] },
-                { pos: [-half, 0, 0], rot: [0, -Math.PI / 2, 0], img: imageUrls[1], dir: [-1, 0, 0] },
-                { pos: [0, half, 0], rot: [-Math.PI / 2, 0, 0], img: imageUrls[2], dir: [0, 1, 0] },
-                { pos: [0, -half, 0], rot: [Math.PI / 2, 0, 0], img: imageUrls[3], dir: [0, -1, 0] },
-                { pos: [0, 0, half], rot: [0, 0, 0], img: imageUrls[4], dir: [0, 0, 1] },
-                { pos: [0, 0, -half], rot: [0, Math.PI, 0], img: imageUrls[5], dir: [0, 0, -1] },
-            ];
-            faceConfigs.forEach(cfg => {
-                const geo = new THREE.PlaneGeometry(size, size);
-                const tex = loader.load(cfg.img);
-                tex.colorSpace = THREE.SRGBColorSpace;
-                const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.set(...cfg.pos);
-                mesh.rotation.set(...cfg.rot);
-                mesh.userData = { dir: cfg.dir, base: [...cfg.pos] };
-                group.add(mesh);
-                faces.push(mesh);
-            });
+      window.addEventListener('resize', onResize);
+      clock = new THREE.Clock();
+    }
 
-            innerGroup = new THREE.Group();
-            scene.add(innerGroup);
-            const innerSize = 1.1, innerHalf = innerSize / 2;
-            [
-                { pos: [innerHalf, 0, 0], rot: [0, Math.PI / 2, 0], img: imageUrls[0] },
-                { pos: [-innerHalf, 0, 0], rot: [0, -Math.PI / 2, 0], img: imageUrls[1] },
-                { pos: [0, innerHalf, 0], rot: [-Math.PI / 2, 0, 0], img: imageUrls[2] },
-                { pos: [0, -innerHalf, 0], rot: [Math.PI / 2, 0, 0], img: imageUrls[3] },
-                { pos: [0, 0, innerHalf], rot: [0, 0, 0], img: imageUrls[4] },
-                { pos: [0, 0, -innerHalf], rot: [0, Math.PI, 0], img: imageUrls[5] },
-            ].forEach(cfg => {
-                const geo = new THREE.PlaneGeometry(innerSize, innerSize);
-                const tex = loader.load(cfg.img);
-                tex.colorSpace = THREE.SRGBColorSpace;
-                const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.set(...cfg.pos);
-                mesh.rotation.set(...cfg.rot);
-                innerGroup.add(mesh);
-            });
+    function onMouseMove(event) {
+      const rect = container.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(faces);
+      toggleOpen(intersects.length > 0);
+    }
 
-            raycaster = new THREE.Raycaster();
-            mouse = new THREE.Vector2();
+    function toggleOpen(open) {
+      if (open === isOpen) return;
+      isOpen = open;
+      faces.forEach(face => {
+        const [bx, by, bz] = face.userData.base;
+        const [dx, dy, dz] = face.userData.dir;
+        const target = open
+          ? [bx + dx * 0.7, by + dy * 0.7, bz + dz * 0.7]
+          : [bx, by, bz];
+        animateFace(face, target, 600);
+      });
+    }
 
-            if (window.innerWidth > 768) {
-                container.addEventListener('mousemove', onMouseMove);
-                container.addEventListener('mouseleave', () => toggleOpen(false));
-            }
-            toggleBtn.addEventListener('click', () => {
-                toggleOpen(!isOpen);
-                toggleBtn.textContent = isOpen ? "Close" : "Open";
-            });
+    function animateFace(face, target, duration) {
+      const start = performance.now();
+      const [sx, sy, sz] = face.position.toArray();
+      function tick(now) {
+        const t = Math.min(1, (now - start) / duration);
+        const ease = t < 0.5
+          ? 4 * t * t * t
+          : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        face.position.set(
+          sx + (target[0] - sx) * ease,
+          sy + (target[1] - sy) * ease,
+          sz + (target[2] - sz) * ease
+        );
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
 
-            window.addEventListener('resize', onResize);
-            clock = new THREE.Clock();
-        }
+    function onResize() {
+      const { clientWidth: W, clientHeight: H } = container;
+      camera.aspect = W / H;
+      camera.updateProjectionMatrix();
+      renderer.setSize(W, H);
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
 
-        function onMouseMove(event) {
-            const rect = container.getBoundingClientRect();
-            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(faces);
-            toggleOpen(intersects.length > 0);
-        }
-
-        function toggleOpen(open) {
-            if (open === isOpen) return;
-            isOpen = open;
-            faces.forEach(face => {
-                const [bx, by, bz] = face.userData.base;
-                const [dx, dy, dz] = face.userData.dir;
-                const target = open
-                    ? [bx + dx * 0.7, by + dy * 0.7, bz + dz * 0.7]
-                    : [bx, by, bz];
-                animateFace(face, target, 600);
-            });
-        }
-
-        function animateFace(face, target, duration) {
-            const start = performance.now();
-            const [sx, sy, sz] = face.position.toArray();
-            function tick(now) {
-                const t = Math.min(1, (now - start) / duration);
-                const ease = t < 0.5
-                    ? 4 * t * t * t
-                    : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                face.position.set(
-                    sx + (target[0] - sx) * ease,
-                    sy + (target[1] - sy) * ease,
-                    sz + (target[2] - sz) * ease
-                );
-                if (t < 1) requestAnimationFrame(tick);
-            }
-            requestAnimationFrame(tick);
-        }
-
-        function onResize() {
-            const { clientWidth: W, clientHeight: H } = container;
-            camera.aspect = W / H;
-            camera.updateProjectionMatrix();
-            renderer.setSize(W, H);
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const t = clock.getElapsedTime();
-            group.rotation.y = t * 0.6;
-            group.rotation.x = t * 0.4;
-            group.position.y = Math.sin(t * 1.2) * 0.06;
-            innerGroup.rotation.x = group.rotation.x;
-            innerGroup.rotation.y = group.rotation.y;
-            innerGroup.rotation.z = group.rotation.z;
-            renderer.render(scene, camera);
-        }
-    </script>
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      group.rotation.y = t * 0.6;
+      group.rotation.x = t * 0.4;
+      group.position.y = Math.sin(t * 1.2) * 0.06;
+      innerGroup.rotation.x = group.rotation.x;
+      innerGroup.rotation.y = group.rotation.y;
+      innerGroup.rotation.z = group.rotation.z;
+      renderer.render(scene, camera);
+    }
+  </script>
 </body>
 </html>
