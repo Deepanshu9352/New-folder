@@ -57,13 +57,13 @@
         <!-- Heading -->
         <h1
           class="text-3xl md:text-5xl font-bold px-6 py-2 rounded-lg bg-white shadow text-center text-gray-700 cursor-pointer hover:bg-black hover:text-white">
-          Happy Birthday
+          Happy Birthday Anuu
         </h1>
 
         <!-- Date -->
         <p id="bdayDate"
           class="text-lg md:text-xl font-semibold px-6 py-2 rounded-lg bg-white shadow text-gray-700 cursor-pointer hover:bg-black hover:text-white">
-          05 September 2025
+          09 October 2025
         </p>
 
         <!-- Cube -->
@@ -181,7 +181,7 @@
         const geo = new THREE.PlaneGeometry(size, size);
         loader.load(cfg.img, (tex) => {
           tex.colorSpace = THREE.SRGBColorSpace;
-          const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+          const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
           const mesh = new THREE.Mesh(geo, mat);
           mesh.position.set(...cfg.pos);
           mesh.rotation.set(...cfg.rot);
